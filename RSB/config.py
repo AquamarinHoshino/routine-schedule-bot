@@ -29,7 +29,7 @@ def load_categories() -> list[Category]:
             try:
                 file_json = json.load(file)
                 arr = file_json.get('categories')
-                return [Category(i['public_name'], os.path.join(*i['file_name']), i['size']) for i in arr]
+                return [Category(i['public_name'], os.path.sep.join(i['file_name']), i['size']) for i in arr]
             
             except json.decoder.JSONDecodeError:
                 log.warning(f"settings file {CATEGORIES_FILE} is corrupted")

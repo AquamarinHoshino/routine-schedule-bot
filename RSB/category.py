@@ -43,7 +43,7 @@ class Category:
             log.warning(f"file {self.file_name} is not a .csv file, filename was edited")
             self.file_name += '.csv'
         if not os.path.exists(self.file_name):
-            log.error(f"file {self.file_name}.csv is not exist in project directory")
+            log.error(f"file {self.file_name} is not exist in project directory")
             with open(self.file_name, "w", newline="", encoding="utf-8") as f:
                 f.write("day;action;additional\n")
 
