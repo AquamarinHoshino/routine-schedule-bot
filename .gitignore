@@ -1,0 +1,13 @@
+venv/
+logs/
+__pycache__/
+RSB/__pycache__/
+
+*.pyc
+*.log
+.env
+.vscode
+
+categories/*
+!categories/*_example.*
+categories.json
