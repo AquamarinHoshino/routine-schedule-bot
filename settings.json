@@ -1,0 +1,16 @@
+{
+	"bot_token": "None",
+	"user_id": 0,
+	"categories": [
+		{
+			"public_name": "HomeCleaning",
+			"file_name": "categories\\cleaning.csv",
+			"size": 2
+		},
+		{
+			"public_name": "Reading",
+			"file_name": "categories\\reading.csv",
+			"size": 1
+		}
+	]
+}
