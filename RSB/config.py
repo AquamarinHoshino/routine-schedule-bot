@@ -11,6 +11,7 @@ log = logging.getLogger(__name__)
 BASE_DIR = Path(__file__).resolve().parent.parent
 CATEGORIES_FILE = BASE_DIR / "categories.json"
 CATEGORIES_DIR = BASE_DIR / "categories"
+RESOURCES_DIR = BASE_DIR / "resources"
 
 load_dotenv()
 BOT_TOKEN: str = os.environ["BOT_TOKEN"]
@@ -36,6 +37,11 @@ def load_categories() -> list[Category]:
                 os.remove(CATEGORIES_FILE)
                 return []
 
+def load_resource(name: str) -> list[str]:
+    file_name = RESOURCES_DIR / name
+    with open(file_name, "r", encoding="utf-8") as file:
+        return file.readlines()
+
 def save_categories(categories: list) -> None:
     data = {"categories": [c.to_dict() for c in categories]}
     with open(CATEGORIES_FILE, "w", encoding="utf-8") as file:
@@ -47,7 +53,7 @@ def create_category(categories: list, public_name: str, file_name: str, size: in
     categories.append(category)
     return category
 
-def get_today_tasks(arr: list[Category], only_actives: bool = False):
+def get_today_tasks(arr: list[Category], only_actives: bool = False) -> list:
     res = []
     for i in arr:
         task = i.today()

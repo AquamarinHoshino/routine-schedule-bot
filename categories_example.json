@@ -1,14 +1,1 @@
-{
-	"categories": [
-		{
-			"public_name": "HomeCleaning",
-			"file_name": ["categories", "cleaning_example.csv"],
-			"size": 2
-		},
-		{
-			"public_name": "Reading",
-			"file_name":["categories", "reading_example.csv"],
-			"size": 1
-		}
-	]
-}
+{"categories": [{"public_name": "HomeCleaning", "file_name": ["categories", "cleaning_example.csv"], "size": 2}, {"public_name": "Reading", "file_name": ["categories", "reading_example.csv"], "size": 1}]}

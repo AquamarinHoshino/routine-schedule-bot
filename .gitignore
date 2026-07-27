@@ -2,6 +2,8 @@ venv/
 logs/
 __pycache__/
 RSB/__pycache__/
+RSB/core/__pycache__
+RSB/handlers/__pycache__
 
 *.pyc
 *.log
