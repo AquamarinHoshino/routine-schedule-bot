@@ -13,6 +13,8 @@ from RSB.handlers.select import select_cmd, select_task
 from RSB.handlers.delete import delete_cmd, delete_cat
 from RSB.handlers.add import build_add_conversation_handler
 from RSB.handlers.remind import schedule_messages
+from RSB.handlers.timezone import build_timezone_conversation_handler
+from RSB.handlers.times import build_times_conversation_handler
 
 log = logging.getLogger(__name__)
 
@@ -39,6 +41,8 @@ def main():
 
     # Напоминания
     schedule_messages(app)
+    app.add_handler(build_times_conversation_handler(), group=10)
+    app.add_handler(build_timezone_conversation_handler(), group=10)
 
     # Автоочистка pending-сообщений и автосейв категорий
     app.add_handler(TypeHandler(Update, pending_handler), group=-4)

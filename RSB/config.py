@@ -8,14 +8,52 @@ from pathlib import Path
 
 log = logging.getLogger(__name__)
 
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 CATEGORIES_FILE = BASE_DIR / "categories.json"
+SETTINGS_FILE = BASE_DIR / "settings.json"
 CATEGORIES_DIR = BASE_DIR / "categories"
 RESOURCES_DIR = BASE_DIR / "resources"
+
 
 load_dotenv()
 BOT_TOKEN: str = os.environ["BOT_TOKEN"]
 USER_ID: int = int(os.environ["USER_ID"])
+
+
+DEFAULT_SETTINGS = {
+    "timezone": 5,
+    "times": [
+        [12, 0],
+        [16, 0],
+        [20, 0]
+    ]
+}
+
+def load_settings() -> dict:
+
+    if not os.path.isfile(SETTINGS_FILE):
+        log.warning(f"settings file {SETTINGS_FILE} is not exist")
+        return DEFAULT_SETTINGS
+    
+    else:
+        try:
+            with open(SETTINGS_FILE, 'r', encoding='utf-8') as file:
+                file_json = json.load(file)
+                return file_json
+        except json.decoder.JSONDecodeError:
+            log.warning(f"settings file {SETTINGS_FILE} is corrupted")
+            os.remove(SETTINGS_FILE)
+            return DEFAULT_SETTINGS
+
+def save_settings(timezone: int, times: list[list[int]]) -> None:
+    settings = {
+        "timezone": timezone,
+        "times": times
+    }
+    with open(SETTINGS_FILE, 'w', encoding='utf-8') as file:
+        json.dump(settings, file)
+
 
 
 def load_categories() -> list[Category]:
@@ -33,25 +71,29 @@ def load_categories() -> list[Category]:
                 return [Category(i['public_name'], os.path.sep.join(i['file_name']), i['size']) for i in arr]
             
             except json.decoder.JSONDecodeError:
-                log.warning(f"settings file {CATEGORIES_FILE} is corrupted")
+                log.warning(f"categories file {CATEGORIES_FILE} is corrupted")
                 os.remove(CATEGORIES_FILE)
                 return []
+
 
 def load_resource(name: str) -> list[str]:
     file_name = RESOURCES_DIR / name
     with open(file_name, "r", encoding="utf-8") as file:
         return file.readlines()
 
+
 def save_categories(categories: list) -> None:
     data = {"categories": [c.to_dict() for c in categories]}
     with open(CATEGORIES_FILE, "w", encoding="utf-8") as file:
         json.dump(data, file, ensure_ascii=False)
+
 
 def create_category(categories: list, public_name: str, file_name: str, size: int) -> Category:
     file_name = categories_dir(file_name)
     category = Category(public_name, file_name, size)
     categories.append(category)
     return category
+
 
 def get_today_tasks(arr: list[Category], only_actives: bool = False) -> list:
     res = []
@@ -60,6 +102,7 @@ def get_today_tasks(arr: list[Category], only_actives: bool = False) -> list:
         if (only_actives and not task.complete) or not only_actives:
             res.append(task)
     return res
+
 
 def categories_dir(file_name: str) -> str:
     return str(CATEGORIES_DIR / file_name)
